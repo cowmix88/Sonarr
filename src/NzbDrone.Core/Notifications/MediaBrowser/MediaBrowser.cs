@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
 
         public override string Link
         {
-            get { return "http://http://mediabrowser.tv/"; }
+            get { return "http://mediabrowser.tv/"; }
         }
 
         public override void OnGrab(String message)
