@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.UniqueIdentifier;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
@@ -37,6 +38,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly ISeriesService _seriesService;
         private readonly IParsingService _parsingService;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly IUniqueIdentifierGenerator _uidProvider;
         private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
@@ -45,6 +47,7 @@ namespace NzbDrone.Core.Download.Pending
                                     ISeriesService seriesService,
                                     IParsingService parsingService,
                                     IDelayProfileService delayProfileService,
+                                    IUniqueIdentifierGenerator uidProvider,
                                     IConfigService configService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
@@ -53,6 +56,7 @@ namespace NzbDrone.Core.Download.Pending
             _seriesService = seriesService;
             _parsingService = parsingService;
             _delayProfileService = delayProfileService;
+            _uidProvider = uidProvider;
             _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -101,7 +105,7 @@ namespace NzbDrone.Core.Download.Pending
 
                     var queue = new Queue.Queue
                                 {
-                                    Id = episode.Id ^ (pendingRelease.Id << 16),
+                                    Id = _uidProvider.Get(string.Format("pending-{0}-ep{1}", pendingRelease.Id , episode.Id)),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,

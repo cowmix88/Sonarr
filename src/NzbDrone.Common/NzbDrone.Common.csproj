@@ -189,6 +189,7 @@
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="Extensions\TryParseExtensions.cs" />
+    <Compile Include="UniqueIdentifier\UniqueIdentifierGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
