@@ -415,8 +415,8 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
+    <Compile Include="Housekeeping\Housekeepers\DeleteBadMediaCovers.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
-    <Compile Include="Housekeeping\Housekeepers\UpdateAnimeCategories.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
@@ -596,8 +596,17 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\ActorResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\EpisodeResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\ImageResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\RatingResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\SeasonResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\ShowResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\Resource\TimeOfDayResource.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookProxy.cs" />
     <Compile Include="MetadataSource\TvDbProxy.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparer.cs" />
+    <Compile Include="MetadataSource\Tvdb\TvdbException.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
@@ -623,8 +632,6 @@
     <Compile Include="Metadata\MetadataType.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
-    <Compile Include="MetadataSource\Tvdb\TvdbException.cs" />
-    <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
@@ -650,6 +657,10 @@
     </Compile>
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowser.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserProxy.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserService.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserSettings.cs" />
     <Compile Include="Notifications\NotificationBase.cs">
       <SubType>Code</SubType>
     </Compile>

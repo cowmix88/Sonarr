@@ -41,10 +41,10 @@ namespace NzbDrone.Core.Test.ParserTests
             },
             new object[]
             {
-                @"C:\Test\Weeds.S01E10.DVDRip.XviD-NZBgeek\AHFMZXGHEWD660.mkv".AsOsAgnostic(),
+                @"C:\Test\Weeds.S01E10.DVDRip.XviD-SONARR\AHFMZXGHEWD660.mkv".AsOsAgnostic(),
                 "weeds",
                 Quality.DVD,
-                "NZBgeek"
+                "SONARR"
             },
             new object[]
             {
@@ -56,6 +56,20 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[]
             {
                 @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\123.mkv".AsOsAgnostic(),
+                "grimm",
+                Quality.WEBDL720p,
+                "ECI"
+            },
+            new object[]
+            {
+                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\abc.mkv".AsOsAgnostic(),
+                "grimm",
+                Quality.WEBDL720p,
+                "ECI"
+            },
+            new object[]
+            {
+                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\b00bs.mkv".AsOsAgnostic(),
                 "grimm",
                 Quality.WEBDL720p,
                 "ECI"

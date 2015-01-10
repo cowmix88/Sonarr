@@ -24,6 +24,11 @@ namespace TVDBSharp.Models
         public string Title { get; set; }
 
         /// <summary>
+        ///     This episode's absolute number
+        /// </summary>
+        public int? AbsoluteEpisodeNumber { get; set; }
+
+        /// <summary>
         ///     This episode's number in the appropriate season.
         /// </summary>
         public int EpisodeNumber { get; set; }
@@ -61,7 +66,7 @@ namespace TVDBSharp.Models
         /// <summary>
         ///     Average rating as shown on IMDb.
         /// </summary>
-        public double? Rating { get; set; }
+        public decimal? Rating { get; set; }
 
         /// <summary>
         ///     Amount of votes cast.

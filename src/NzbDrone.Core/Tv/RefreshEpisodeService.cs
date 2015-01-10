@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -17,14 +16,12 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
-        private readonly ITvdbProxy _tvdbProxy;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService, ITvdbProxy tvdbProxy, IEventAggregator eventAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
-            _tvdbProxy = tvdbProxy;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -69,7 +66,7 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
                     episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
-                    episodeToUpdate.Title = episode.Title;
+                    episodeToUpdate.Title = episode.Title ?? "TBA";
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
                     episodeToUpdate.AirDateUtc = episode.AirDateUtc;
@@ -109,7 +106,7 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
+        private bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
         {
             if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
             {
@@ -120,17 +117,23 @@ namespace NzbDrone.Core.Tv
             return season == null || season.Monitored;
         }
 
-        private static void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)
+        private void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)
         {
-            var groups =
-                allEpisodes.Where(c => c.AirDateUtc.HasValue)
-                    .GroupBy(e => new { e.SeasonNumber, e.AirDate })
-                    .Where(g => g.Count() > 1)
-                    .ToList();
+            if (series.Network == "Netflix")
+            {
+                _logger.Debug("Not adjusting episode air times for Netflix series {0}", series.Title);
+                return;
+            }
+
+            var groups = allEpisodes.Where(c => c.AirDateUtc.HasValue)
+                                    .GroupBy(e => new {e.SeasonNumber, e.AirDate})
+                                    .Where(g => g.Count() > 1)
+                                    .ToList();
 
             foreach (var group in groups)
             {
                 var episodeCount = 0;
+
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
                     episode.AirDateUtc = episode.AirDateUtc.Value.AddMinutes(series.Runtime * episodeCount);
@@ -139,7 +142,7 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static void AdjustDirectToDvdAirDate(Series series, IEnumerable<Episode> allEpisodes)
+        private void AdjustDirectToDvdAirDate(Series series, IEnumerable<Episode> allEpisodes)
         {
             if (series.Status == SeriesStatusType.Ended && allEpisodes.All(v => !v.AirDateUtc.HasValue) && series.FirstAired.HasValue)
             {
@@ -153,23 +156,6 @@ namespace NzbDrone.Core.Tv
 
         private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
         {
-            var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
-
-            foreach (var episode in traktEpisodes)
-            {
-                //I'd use single, but then I'd have to trust the tvdb data... and I don't
-                var tvdbEpisode = tvdbEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber &&
-                                                                    e.EpisodeNumber == episode.EpisodeNumber);
-
-                if (tvdbEpisode == null)
-                {
-                    _logger.Debug("Cannot find matching episode from the tvdb: {0}x{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
-                    continue;
-                }
-
-                episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
-            }
-
             //Return all episodes with no abs number, but distinct for those with abs number
             return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
                                 .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)

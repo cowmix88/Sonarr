@@ -165,6 +165,7 @@
     <Compile Include="Framework\MigrationTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
+    <Compile Include="HealthCheck\Checks\DeleteBadMediaCovers.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationFixture.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheckFixture.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
     <Compile Include="MetadataSourceTests\TvdbDataProxyFixture.cs" />
     <Compile Include="MetadataSourceTests\SearchSeriesComparerFixture.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
@@ -248,7 +250,6 @@
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
-    <Compile Include="MetadataSourceTests\TvdbProxyFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
@@ -352,6 +353,12 @@
     <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Files\html_image.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\emptyfile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\RSS\fanzub.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

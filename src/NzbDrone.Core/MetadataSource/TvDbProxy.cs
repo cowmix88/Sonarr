@@ -14,7 +14,7 @@ using TVDBSharp.Models.Enums;
 
 namespace NzbDrone.Core.MetadataSource
 {
-    public class TvDbProxy : ISearchForNewSeries, IProvideSeriesInfo
+    public class TvDbProxy : ISearchForNewSeries
     {
         private readonly Logger _logger;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
@@ -160,12 +160,13 @@ namespace NzbDrone.Core.MetadataSource
             return series;
         }
 
-        private static Tv.Episode MapEpisode(TVDBSharp.Models.Episode traktEpisode)
+        private static Episode MapEpisode(TVDBSharp.Models.Episode traktEpisode)
         {
-            var episode = new Tv.Episode();
+            var episode = new Episode();
             episode.Overview = traktEpisode.Description;
             episode.SeasonNumber = traktEpisode.SeasonNumber;
             episode.EpisodeNumber = traktEpisode.EpisodeNumber;
+            episode.AbsoluteEpisodeNumber = traktEpisode.AbsoluteEpisodeNumber;
             episode.Title = traktEpisode.Title;
 
             if (traktEpisode.FirstAired != null)
@@ -214,14 +215,14 @@ namespace NzbDrone.Core.MetadataSource
             return phrase;
         }
 
-        private static Tv.Ratings GetRatings(int ratingCount, double? rating)
+        private static Tv.Ratings GetRatings(int ratingCount, decimal? rating)
         {
 
             var result = new Tv.Ratings { Votes = ratingCount };
 
             if (rating != null)
             {
-                result.Percentage = (int)(rating.Value * 100);
+                result.Value = rating.Value;
             }
 
             return result;
